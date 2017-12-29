@@ -2,6 +2,8 @@ import React from 'react';
 import {compose, withProps, withHandlers, withState} from 'recompose';
 import styled, {css} from 'styled-components';
 import uuidv1 from 'uuid/v1';
+import FaAngleLeft from 'react-icons/lib/fa/angle-left';
+import FaAngleRight from 'react-icons/lib/fa/angle-right';
 
 const enhancer = compose(
   withState('slideIndex', 'setSlideIndex', 0),
@@ -9,17 +11,11 @@ const enhancer = compose(
     steps: children
   })),
   withHandlers({
-    handleBack: ({setSlideIndex, slideIndex}) => callback => {
-      if (callback && typeof callback === 'function') {
-        callback();
-      }
-      setSlideIndex(slideIndex - 1);
-    },
-    handleNext: ({setSlideIndex, slideIndex}) => callback => {
-      if (callback && typeof callback === 'function') {
-        callback();
-      }
+    handleNext: ({setSlideIndex, slideIndex}) => () => {
       setSlideIndex(slideIndex + 1);
+    },
+    handleBack: ({setSlideIndex, slideIndex}) => () => {
+      setSlideIndex(slideIndex - 1);
     }
   })
 );
@@ -39,8 +35,12 @@ export const Steps = enhancer(({steps, handleBack, handleNext, slideIndex}) => {
         );
       })}
       <div>
-        <button onClick={handleBack}>Back</button>
-        <button onClick={handleNext}>Next</button>
+        <button onClick={handleBack}>
+          <FaAngleLeft />
+        </button>
+        <button onClick={handleNext}>
+          <FaAngleRight />
+        </button>
       </div>
     </StepsContainer>
   );
